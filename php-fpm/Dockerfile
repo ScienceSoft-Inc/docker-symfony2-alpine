@@ -1,6 +1,6 @@
 FROM alpine:3.4
 
-MAINTAINER Vincent Composieux <vincent.composieux@gmail.com>
+MAINTAINER Vadzim Belski
 
 RUN apk add --update \
     php5-fpm \
@@ -23,10 +23,12 @@ RUN apk add --update \
 
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/*
 
-ADD symfony.ini /etc/php5/fpm/conf.d/
-ADD symfony.ini /etc/php5/cli/conf.d/
+RUN addgroup www-data && adduser -s /bin/bash -D -G  www-data www-data
 
-ADD symfony.pool.conf /etc/php5/fpm/pool.d/
+ADD symfony.ini /etc/php5/fpm.d/
+ADD symfony.ini /etc/php5/conf.d/
+
+ADD symfony.pool.conf /etc/php5/php-fpm.conf
 
 CMD ["php-fpm", "-F"]
 
